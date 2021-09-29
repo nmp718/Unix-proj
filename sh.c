@@ -49,6 +49,9 @@ int sh( int argc, char **argv, char **envp )
     /* get command line and process */
 
     /* check for each built in command and implement */
+    /*if(input==exit){
+      
+    }*/
 
      /*  else  program to exec */
     {
