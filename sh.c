@@ -14,6 +14,8 @@
 #include <signal.h>
 #include "sh.h"
 
+#define MAXLINE 128
+
 int sh( int argc, char **argv, char **envp )
 {
   char *prompt = calloc(PROMPTMAX, sizeof(char));
@@ -45,7 +47,7 @@ int sh( int argc, char **argv, char **envp )
   while ( go )
   {
     /* print your prompt */
-
+  
     /* get command line and process */
 
     /* check for each built in command and implement */
@@ -65,14 +67,14 @@ int sh( int argc, char **argv, char **envp )
   return 0;
 } /* sh() */
 
-char *which(char *command, struct pathelement *pathlist )
+char *which(char *command, struct pathelement *pathlist ) //prints the first, will be used for executable. Step through linked list, take string, see if its executable, if not, increment to next
 {
    /* loop through pathlist until finding command and return it.  Return
    NULL when not found. */
 
 } /* which() */
 
-char *where(char *command, struct pathelement *pathlist )
+char *where(char *command, struct pathelement *pathlist ) // prints all. Continue going to the list, create a string with all the answers, return that. 
 {
   /* similarly loop through finding all locations of command */
 } /* where() */
