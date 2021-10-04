@@ -48,23 +48,21 @@ int sh( int argc, char **argv, char **envp )
 
   while ( go )
   {
-    /* print your prompt 
+    // print your prompt 
     printf(">> ");
-    
-    */
 
     /* get command line and process */
 
     /* check for each built in command and implement */
-    /*
     
-    if (fgets(buffer, BUFFERSIZE, stdin) != NULL) {
-      if(input==exit){
+    
+    if (fgets(buffer, BUFFERMAX, stdin) != NULL) {
+      if (buffer[strlen(buffer) - 1] == '\n')buffer[strlen(buffer) - 1] = 0; /* replace newline with null */  
       
-      }
+      
     
     }
-    */
+    
 
      /*  else  program to exec */
     {
