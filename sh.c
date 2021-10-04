@@ -14,7 +14,9 @@
 #include <signal.h>
 #include "sh.h"
 
-#define MAXLINE 128
+#define BUFFERMAX 128
+
+char buffer[BUFFERMAX];
 
 int sh( int argc, char **argv, char **envp )
 {
@@ -46,14 +48,23 @@ int sh( int argc, char **argv, char **envp )
 
   while ( go )
   {
-    /* print your prompt */
-  
+    /* print your prompt 
+    printf(">> ");
+    
+    */
+
     /* get command line and process */
 
     /* check for each built in command and implement */
-    /*if(input==exit){
+    /*
+    
+    if (fgets(buffer, BUFFERSIZE, stdin) != NULL) {
+      if(input==exit){
       
-    }*/
+      }
+    
+    }
+    */
 
      /*  else  program to exec */
     {
