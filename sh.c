@@ -33,7 +33,7 @@ int sh( int argc, char **argv, char **envp )
   password_entry = getpwuid(uid);               /* get passwd info */
   homedir = password_entry->pw_dir;		/* Home directory to start
 						  out with*/
-     
+  
   if ( (pwd = getcwd(NULL, PATH_MAX+1)) == NULL )
   {
     perror("getcwd");
@@ -46,10 +46,18 @@ int sh( int argc, char **argv, char **envp )
   /* Put PATH into a linked list */
   pathlist = get_path();
 
+  prompt = ">>";
+
+  const char s[2] = " ";      // used for strtok to chop up strings
+  //char *token;  
+
+  char *exitval = "exit";     // Used for a string comparison for exit
+
   while ( go )
   {
     // print your prompt 
-    printf(">> ");
+
+    printf("\n%c", *prompt);
 
     /* get command line and process */
 
@@ -58,7 +66,10 @@ int sh( int argc, char **argv, char **envp )
     
     if (fgets(buffer, BUFFERMAX, stdin) != NULL) {
       if (buffer[strlen(buffer) - 1] == '\n')buffer[strlen(buffer) - 1] = 0; /* replace newline with null */  
-      
+      command = strtok(buffer, s);  //Set first part of string as command
+      if(strcmp(command,exitval)==0){
+        exit(0);
+      }
       
     
     }
