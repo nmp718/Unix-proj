@@ -69,7 +69,10 @@ int sh( int argc, char **argv, char **envp )
     if (fgets(buffer, BUFFERMAX, stdin) != NULL) {
       if (buffer[strlen(buffer) - 1] == '\n')buffer[strlen(buffer) - 1] = 0;              /* replace newline with null */  
       command = strtok(buffer, s);                                                        //Set first part of string as command
-      arg = strtok(buffer, s);                                                            // Set second part of string as argument
+      printf("%s", command);
+      //arg = strtok(NULL, s);                                                            // Set second part of string as argument
+      
+      printf("%s", arg);
 
       if(strcmp(command,"exit")==0){                                                      // If the command entered is exit, exit the shell
         exit(0);
@@ -79,7 +82,7 @@ int sh( int argc, char **argv, char **envp )
         printf("\n[%s]", pwd);                                                              // Prints the current working directory
       }
       if(strcmp(command,"prompt")==0){                                                       // If the command entered is prompt
-        if(strcmp(arg," ")==0){                                                               // if there is not argument for prompt
+        if(strcmp(arg, "\0")==0){                                                               // if there is not argument for prompt
           printf("No argument");
         }
                                                                        
