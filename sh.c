@@ -46,7 +46,7 @@ int sh( int argc, char **argv, char **envp )
   /* Put PATH into a linked list */
   pathlist = get_path();
 
-  prompt = ">>";
+  char* arrows = ">> ";       // Prompt is for a user prefix for the working directory
 
   const char s[2] = " ";      // used for strtok to chop up strings
   //char *token;  
@@ -57,7 +57,9 @@ int sh( int argc, char **argv, char **envp )
   {
     // print your prompt 
 
-    printf("\n%c", *prompt);
+    pwd=getcwd(NULL, 0);      // Finds the current working directory
+    printf("\n[%s]", pwd);      // Prints the current working directory
+    printf("%s", arrows);       // arrows at the end of the directory
 
     /* get command line and process */
 
@@ -65,10 +67,22 @@ int sh( int argc, char **argv, char **envp )
     
     
     if (fgets(buffer, BUFFERMAX, stdin) != NULL) {
-      if (buffer[strlen(buffer) - 1] == '\n')buffer[strlen(buffer) - 1] = 0; /* replace newline with null */  
-      command = strtok(buffer, s);  //Set first part of string as command
-      if(strcmp(command,exitval)==0){
+      if (buffer[strlen(buffer) - 1] == '\n')buffer[strlen(buffer) - 1] = 0;              /* replace newline with null */  
+      command = strtok(buffer, s);                                                        //Set first part of string as command
+      arg = strtok(buffer, s);                                                            // Set second part of string as argument
+
+      if(strcmp(command,"exit")==0){                                                      // If the command entered is exit, exit the shell
         exit(0);
+      }
+      if(strcmp(command,"pwd")==0){                                                       // If the command entered is pwd, print the current working directory
+        pwd=getcwd(NULL, 0);                                                              // Finds the current working directory
+        printf("\n[%s]", pwd);                                                              // Prints the current working directory
+      }
+      if(strcmp(command,"prompt")==0){                                                       // If the command entered is prompt
+        if(strcmp(arg," ")==0){                                                               // if there is not argument for prompt
+          printf("No argument");
+        }
+                                                                       
       }
       
     
