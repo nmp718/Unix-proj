@@ -14,6 +14,10 @@
 #include <signal.h>
 #include "sh.h"
 
+#define BUFFERMAX 128
+
+char buffer[BUFFERMAX];
+
 int sh( int argc, char **argv, char **envp )
 {
   char *prompt = calloc(PROMPTMAX, sizeof(char));
@@ -29,7 +33,7 @@ int sh( int argc, char **argv, char **envp )
   password_entry = getpwuid(uid);               /* get passwd info */
   homedir = password_entry->pw_dir;		/* Home directory to start
 						  out with*/
-     
+  
   if ( (pwd = getcwd(NULL, PATH_MAX+1)) == NULL )
   {
     perror("getcwd");
@@ -42,16 +46,58 @@ int sh( int argc, char **argv, char **envp )
   /* Put PATH into a linked list */
   pathlist = get_path();
 
+  char* arrows = ">> ";       // Prompt is for a user prefix for the working directory
+
+  const char s[2] = " ";      // used for strtok to chop up strings
+  //char *token;  
+
+  char *exitval = "exit";     // Used for a string comparison for exit
+
+  pwd=getcwd(NULL, 0);      // Finds the current working directory
+
   while ( go )
   {
-    /* print your prompt */
+    // print your prompt 
+
+    printf("\n[%s]", pwd);      // Prints the current working directory
+    printf("%s", arrows);       // arrows at the end of the directory
 
     /* get command line and process */
 
     /* check for each built in command and implement */
-    /*if(input==exit){
+    
+    
+    if (fgets(buffer, BUFFERMAX, stdin) != NULL) {
+      if (buffer[strlen(buffer) - 1] == '\n')buffer[strlen(buffer) - 1] = 0;              /* replace newline with null */  
+      command = strtok(buffer, " \n");                                                        //Set first part of string as command
+      printf("%s", command);
+      arg = strtok(NULL, " \n");                                                            // Set second part of string as argument (can maybe use s instead of \n)
       
-    }*/
+      printf("\n%s", arg);
+
+      if(strcmp(command,"exit")==0){                                                      // If the command entered is exit, exit the shell
+        exit(0);
+      }
+      if(strcmp(command,"pwd")==0){                                                       // If the command entered is pwd, print the current working directory
+        pwd=getcwd(NULL, 0);                                                              // Finds the current working directory
+        printf("\n[%s]", pwd);                                                              // Prints the current working directory
+      }
+      if(strcmp(command,"prompt")==0){                                                       // If the command entered is prompt
+        
+        if(strcmp(arg, "\0")==0){                                                               // if there is not argument for prompt
+          printf("No argument");
+        }
+        else{                                                                                // When there is an argument with the prompt
+          printf("\nWith an argument");
+          strcat(arg,pwd);                  //  This is not concatonating because there is not enough space
+          printf("%s",pwd);       // a test
+        }
+
+      }
+      
+    
+    }
+    
 
      /*  else  program to exec */
     {
@@ -65,14 +111,14 @@ int sh( int argc, char **argv, char **envp )
   return 0;
 } /* sh() */
 
-char *which(char *command, struct pathelement *pathlist )
+char *which(char *command, struct pathelement *pathlist ) //prints the first, will be used for executable. Step through linked list, take string, see if its executable, if not, increment to next
 {
    /* loop through pathlist until finding command and return it.  Return
    NULL when not found. */
 
 } /* which() */
 
-char *where(char *command, struct pathelement *pathlist )
+char *where(char *command, struct pathelement *pathlist ) // prints all. Continue going to the list, create a string with all the answers, return that. 
 {
   /* similarly loop through finding all locations of command */
 } /* where() */
