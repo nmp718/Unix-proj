@@ -53,11 +53,12 @@ int sh( int argc, char **argv, char **envp )
 
   char *exitval = "exit";     // Used for a string comparison for exit
 
+  pwd=getcwd(NULL, 0);      // Finds the current working directory
+
   while ( go )
   {
     // print your prompt 
 
-    pwd=getcwd(NULL, 0);      // Finds the current working directory
     printf("\n[%s]", pwd);      // Prints the current working directory
     printf("%s", arrows);       // arrows at the end of the directory
 
@@ -68,11 +69,11 @@ int sh( int argc, char **argv, char **envp )
     
     if (fgets(buffer, BUFFERMAX, stdin) != NULL) {
       if (buffer[strlen(buffer) - 1] == '\n')buffer[strlen(buffer) - 1] = 0;              /* replace newline with null */  
-      command = strtok(buffer, s);                                                        //Set first part of string as command
+      command = strtok(buffer, " \n");                                                        //Set first part of string as command
       printf("%s", command);
-      //arg = strtok(NULL, s);                                                            // Set second part of string as argument
+      arg = strtok(NULL, " \n");                                                            // Set second part of string as argument (can maybe use s instead of \n)
       
-      printf("%s", arg);
+      printf("\n%s", arg);
 
       if(strcmp(command,"exit")==0){                                                      // If the command entered is exit, exit the shell
         exit(0);
@@ -82,10 +83,16 @@ int sh( int argc, char **argv, char **envp )
         printf("\n[%s]", pwd);                                                              // Prints the current working directory
       }
       if(strcmp(command,"prompt")==0){                                                       // If the command entered is prompt
+        
         if(strcmp(arg, "\0")==0){                                                               // if there is not argument for prompt
           printf("No argument");
         }
-                                                                       
+        else{                                                                                // When there is an argument with the prompt
+          printf("\nWith an argument");
+          strcat(arg,pwd);                  //  This is not concatonating because there is not enough space
+          printf("%s",pwd);       // a test
+        }
+
       }
       
     
