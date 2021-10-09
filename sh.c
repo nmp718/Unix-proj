@@ -24,7 +24,7 @@ int sh( int argc, char **argv, char **envp )
   char *commandline = calloc(MAX_CANON, sizeof(char));
   char *command, *arg, *commandpath, *p, *pwd, *owd;
   char **args = calloc(MAXARGS, sizeof(char*));
-  int uid, i, status, argsct, go = 1;
+  int uid, i, status, argsct, go = 1;                         // argsct is args count, number of arguments
   struct passwd *password_entry;
   char *homedir;
   struct pathelement *pathlist;
@@ -67,33 +67,75 @@ int sh( int argc, char **argv, char **envp )
     /* check for each built in command and implement */
     
     
+    
     if (fgets(buffer, BUFFERMAX, stdin) != NULL) {
-      if (buffer[strlen(buffer) - 1] == '\n')buffer[strlen(buffer) - 1] = 0;              /* replace newline with null */  
-      command = strtok(buffer, " \n");                                                        //Set first part of string as command
-      printf("%s", command);
-      arg = strtok(NULL, " \n");                                                            // Set second part of string as argument (can maybe use s instead of \n)
+      if (strlen(buffer)>1){                                                                // if the user actually inputs something
+        if (buffer[strlen(buffer) - 1] == '\n')buffer[strlen(buffer) - 1] = 0;              /* replace newline with null */  
+          //args[0] = malloc(sizeof(char*));
+          //args[0] = strtok(buffer,s);                  //command = strtok(buffer, s);                                                        
       
-      printf("\n%s", arg);
+            //printf("Working here");
 
-      if(strcmp(command,"exit")==0){                                                      // If the command entered is exit, exit the shell
-        exit(0);
-      }
-      if(strcmp(command,"pwd")==0){                                                       // If the command entered is pwd, print the current working directory
-        pwd=getcwd(NULL, 0);                                                              // Finds the current working directory
-        printf("\n[%s]", pwd);                                                              // Prints the current working directory
-      }
-      if(strcmp(command,"prompt")==0){                                                       // If the command entered is prompt
+          args[0]=strtok(buffer,s);                   //Set first part of string as command
+
+          int i=0;
+
+          while (args[i++]!=NULL){
+            args[i]=strtok(NULL,s);
+          } //note the ; this just loops this with no code inside of it.
+
+          args[i]=NULL;
+
+          //now args array contains all of the arguments (command is in args[0]) and I is the count of how many arguments.
+
+      
+
+        //printf("%s", args[0]);                            // A test to see what the command argument is                    
+
+        //args[1] = strtok(NULL, s);                                                            // Set second part of string as argument (can maybe use s instead of \n)
+      
+        //printf("\n%s", args[1]);
+
+        if(strcmp(args[0],"exit")==0){                                                      // If the command entered is exit, exit the shell
+          exit(0);
+        }
+        if(strcmp(args[0],"pwd")==0){                                                       // If the command entered is pwd, print the current working directory
+          //pwd=getcwd(NULL, 0);                                                              // Finds the current working directory
+          printf("\n[%s]", pwd);                                                              // Prints the current working directory
+        }
+        if(strcmp(args[0],"prompt")==0){                                                       // If the command entered is prompt
         
-        if(strcmp(arg, "\0")==0){                                                               // if there is not argument for prompt
-          printf("No argument");
-        }
-        else{                                                                                // When there is an argument with the prompt
-          printf("\nWith an argument");
-          strcat(arg,pwd);                  //  This is not concatonating because there is not enough space
-          printf("%s",pwd);       // a test
-        }
+          if(args[1]==NULL){                                                               // if there is not argument for prompt
+            printf("Enter Prompt: ");
+            fgets(buffer, BUFFERMAX, stdin);
+            strcpy(prompt,buffer);
+            printf("%s", prompt);
+            sprintf(pwd, "%s%s",prompt,pwd);
+          }
+          else{                                                                                // When there is an argument with the prompt
+            printf("\nWith an argument");
+            //strcat(pwd,args[1]);                  //  This is not concatonating because there is not enough space
+            sprintf(pwd, "%s%s",args[1],pwd);
+          
+            //printf("%s",pwd);       // a test
+          }
 
       }
+
+      if(strcmp(args[0],"list")==0){
+
+      }
+
+      if(strcmp(args[0],"pid")==0){                 // Prints the current pid
+        pid=getpid();
+        printf("%d",pid);
+      }
+
+      }
+      else{
+        printf("Invalid Command: Try again");
+      }
+      
       
     
     }
