@@ -105,7 +105,7 @@ int sh( int argc, char **argv, char **envp )
           printf("\n[%s]", pwd);                                                              // Prints the current working directory
         }
         if(strcmp(args[0],"prompt")==0){                                                       // If the command entered is prompt
-          pwd=getcwd(NULL, 0); 
+          pwd=getcwd(NULL, 0);
           if(args[1]==NULL){                                                               // if there is not argument for prompt
             printf("Enter Prompt: ");
             fgets(buffer, BUFFERMAX, stdin);
@@ -116,7 +116,7 @@ int sh( int argc, char **argv, char **envp )
           }
           else{                                                                                // When there is an argument with the prompt
             printf("\nWith an argument");
-            prompt=args[1];
+            strcpy(prompt,args[1]);
             strcat(prompt,pwd);
             pwd = prompt;
           
