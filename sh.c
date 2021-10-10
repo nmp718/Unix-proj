@@ -128,7 +128,15 @@ int sh( int argc, char **argv, char **envp )
         if(strcmp(args[0],"ls")==0){
           DIR *d;
           struct dirent *dir;
-          d=opendir(pwd);
+          if(args[1]==NULL){                    //When no file location is specified
+            d=opendir(pwd);
+          }
+          else if(strcmp(args[1],"~")==0){         //LS home directory
+            d=opendir(homedir);
+          }
+          else{                                 //When args is a specific folder
+            d=opendir(args[1]);
+          }
           if (d) {
             while ((dir = readdir(d)) != NULL) {
               if (dir->d_type == DT_REG){
