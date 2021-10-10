@@ -143,7 +143,7 @@ int sh( int argc, char **argv, char **envp )
             }
           }
           else if(args[2]!=NULL){                      // Too many arguments
-            printf("Insert error message here");        // THIS IS NOT THE CORRECT ERROR MESSAGE, CHANGE THIS LATER NICK
+            printf("printenv: Too many arguments.");        // THIS IS NOT THE CORRECT ERROR MESSAGE, CHANGE THIS LATER NICK
           }
           else{                                         // Just one argument
             printf("With an argument");
