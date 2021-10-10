@@ -1,6 +1,5 @@
-// Nick was here
-// And Jon too
-// This push is at 8:46 pm
+// Nick Peterson was here
+// And Jonathan Adams too
 
 #include <stdio.h>
 #include <string.h>
@@ -96,7 +95,6 @@ int sh( int argc, char **argv, char **envp )
         //args[1] = strtok(NULL, s);                                                            // Set second part of string as argument (can maybe use s instead of \n)
       
         //printf("\n%s", args[1]);
-
         if(strcmp(args[0],"exit")==0){                                                      // If the command entered is exit, exit the shell
           exit(0);
         }
@@ -110,16 +108,12 @@ int sh( int argc, char **argv, char **envp )
             printf("Enter Prompt: ");
             fgets(buffer, BUFFERMAX, stdin);
             strcpy(prompt,buffer);
-            prompt[strlen(prompt)-1]='\0';              //Concatenates prompt to the front of pwd
+            prompt[strlen(prompt)-1]='\0';                      //Removes the newline char from prompt
           }
-          else{                                                                                // When there is an argument with the prompt
-            //char swapPwd[128+PROMPTMAX]; //set to max size of pwd + prompt size
+          else{                                                             // When there is an argument with the prompt
             printf("\nWith an argument");
             strcpy(prompt,args[1]);   //Make sure prompt does not get overwritten
-          
-            //printf("%s",pwd);       // a test
           }
-
         }
         else if(strcmp(args[0],"ls")==0){
           DIR *d;
@@ -138,7 +132,6 @@ int sh( int argc, char **argv, char **envp )
           }
         }
         else if(strcmp(args[0],"cd")==0){
-          DIR *d;
           if(args[1]==NULL){                            //cd to home directory
             strcpy(pwd,homedir);
             chdir(pwd);
@@ -147,12 +140,12 @@ int sh( int argc, char **argv, char **envp )
             chdir("..");
             pwd = getcwd(NULL, 0);
           }
-          else if((d = opendir(args[1])) != NULL){      //cd to specified directory
+          else if(opendir(args[1]) != NULL){      //cd to specified directory
             if(*args[1]=='/'){            //Checks if connecting to a specific directory
               strcpy(pwd,args[1]);
               chdir(pwd);
             }
-            else{                   //If connecting to a child directory
+            else{                         //If connecting to a child directory
               strcat(pwd,"/");
               strcat(pwd,args[1]);
               chdir(pwd);
@@ -200,8 +193,6 @@ int sh( int argc, char **argv, char **envp )
           else if(args[2]==NULL){                     // one argument
             unsetenv(args[1]); 
           }
-          
-        
         }
         else if(strcmp(args[0],"which")==0 && args[1]!=NULL){                 // Which command
           which(args[1],pathlist);
