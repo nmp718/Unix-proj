@@ -59,8 +59,7 @@ int sh( int argc, char **argv, char **envp )
   while ( go )
   {
     // print your prompt 
-
-    printf("\n[%s]", pwd);      // Prints the current working directory
+    printf("\n%s[%s]", prompt, pwd);      // Prints the current working directory
     printf("%s", arrows);       // arrows at the end of the directory
 
     /* get command line and process */
@@ -111,14 +110,11 @@ int sh( int argc, char **argv, char **envp )
             fgets(buffer, BUFFERMAX, stdin);
             strcpy(prompt,buffer);
             prompt[strlen(prompt)-1]='\0';              //Concatenates prompt to the front of pwd
-            strcat(prompt,pwd);
-            pwd = prompt;
           }
           else{                                                                                // When there is an argument with the prompt
+            //char swapPwd[128+PROMPTMAX]; //set to max size of pwd + prompt size
             printf("\nWith an argument");
-            strcpy(prompt,args[1]);
-            strcat(prompt,pwd);
-            pwd = prompt;
+            strcpy(prompt,args[1]);   //Make sure prompt does not get overwritten
           
             //printf("%s",pwd);       // a test
           }
@@ -151,10 +147,16 @@ int sh( int argc, char **argv, char **envp )
             pwd = getcwd(NULL, 0);
           }
           else if((d = opendir(args[1])) != NULL){      //cd to specified directory
-            strcat(pwd,"/");
-            strcat(pwd,args[1]);
-            chdir(pwd);
-            pwd = getcwd(NULL, 0);          //Call getcwd to purity any errors in new pwd
+            if(*args[1]=='/'){            //Checks if connecting to a specific directory
+              strcpy(pwd,args[1]);
+              chdir(pwd);
+            }
+            else{                   //If connecting to a child directory
+              strcat(pwd,"/");
+              strcat(pwd,args[1]);
+              chdir(pwd);
+            }
+            pwd = getcwd(NULL, 0);          //Call getcwd to purify any errors in new pwd
           }
           else{
             printf("\nFile not found.");
