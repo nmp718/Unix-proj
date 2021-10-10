@@ -100,11 +100,11 @@ int sh( int argc, char **argv, char **envp )
         if(strcmp(args[0],"exit")==0){                                                      // If the command entered is exit, exit the shell
           exit(0);
         }
-        if(strcmp(args[0],"pwd")==0){                                                       // If the command entered is pwd, print the current working directory
+        else if(strcmp(args[0],"pwd")==0){                                                       // If the command entered is pwd, print the current working directory
           //pwd=getcwd(NULL, 0);                                                              // Finds the current working directory
           printf("\n[%s]", pwd);                                                              // Prints the current working directory
         }
-        if(strcmp(args[0],"prompt")==0){                                                       // If the command entered is prompt
+        else if(strcmp(args[0],"prompt")==0){                                                       // If the command entered is prompt
           pwd=getcwd(NULL, 0);
           if(args[1]==NULL){                                                               // if there is not argument for prompt
             printf("Enter Prompt: ");
@@ -124,8 +124,7 @@ int sh( int argc, char **argv, char **envp )
           }
 
         }
-
-        if(strcmp(args[0],"ls")==0){
+        else if(strcmp(args[0],"ls")==0){
           DIR *d;
           struct dirent *dir;
           if(args[1]==NULL){                    //When no file location is specified
@@ -146,13 +145,11 @@ int sh( int argc, char **argv, char **envp )
           closedir(d);
           }
         }
-
-        if(strcmp(args[0],"pid")==0){                 // Prints the current pid
+        else if(strcmp(args[0],"pid")==0){                 // Prints the current pid
           pid=getpid();
           printf("%d",pid);
         }
-
-        if(strcmp(args[0],"printenv")==0){                 // Prints the environment
+        else if(strcmp(args[0],"printenv")==0){                 // Prints the environment
           if(args[1]==NULL){                                // if there is no argument
 
           }
@@ -161,8 +158,7 @@ int sh( int argc, char **argv, char **envp )
           }
         
         }
-
-        if(strcmp(args[0],"setenv")==0){                 // Prints the environment
+        else if(strcmp(args[0],"setenv")==0){                 // Prints the environment
           if(args[1]==NULL){                                // if there is no argument
 
           }
@@ -171,14 +167,10 @@ int sh( int argc, char **argv, char **envp )
           }
         
         }
-
+        else{     //Unable to parse command
+          printf("Invalid Command: Try again");
+        }
       }
-      else{
-        printf("Invalid Command: Try again");
-      }
-      
-      
-    
     }
     
 
