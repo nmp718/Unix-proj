@@ -59,8 +59,8 @@ int sh( int argc, char **argv, char **envp )
   while ( go )
   {
     // print your prompt 
-    printf("%s",prompt);
-    printf("\n[%s]", pwd);      // Prints the current working directory
+
+    printf("\n%s[%s]", prompt, pwd);      // Prints the current working directory
     printf("%s", arrows);       // arrows at the end of the directory
 
     /* get command line and process */
@@ -100,41 +100,74 @@ int sh( int argc, char **argv, char **envp )
         if(strcmp(args[0],"exit")==0){                                                      // If the command entered is exit, exit the shell
           exit(0);
         }
-        if(strcmp(args[0],"pwd")==0){                                                       // If the command entered is pwd, print the current working directory
+        else if(strcmp(args[0],"pwd")==0){                                                       // If the command entered is pwd, print the current working directory
           //pwd=getcwd(NULL, 0);                                                              // Finds the current working directory
           printf("\n[%s]", pwd);                                                              // Prints the current working directory
         }
-        if(strcmp(args[0],"prompt")==0){                                                       // If the command entered is prompt
+        else if(strcmp(args[0],"prompt")==0){                                                       // If the command entered is prompt
           pwd=getcwd(NULL, 0);
           if(args[1]==NULL){                                                               // if there is not argument for prompt
             printf("Enter Prompt: ");
             fgets(buffer, BUFFERMAX, stdin);
             strcpy(prompt,buffer);
             prompt[strlen(prompt)-1]='\0';              //Concatenates prompt to the front of pwd
-            strcat(prompt,pwd);
-            pwd = prompt;
           }
           else{                                                                                // When there is an argument with the prompt
+            //char swapPwd[128+PROMPTMAX]; //set to max size of pwd + prompt size
             printf("\nWith an argument");
-            strcpy(prompt,args[1]);
-            strcat(prompt,pwd);
-            pwd = prompt;
+            strcpy(prompt,args[1]);   //Make sure prompt does not get overwritten
           
             //printf("%s",pwd);       // a test
           }
 
         }
-
-        if(strcmp(args[0],"ls")==0){
-
+        else if(strcmp(args[0],"ls")==0){
+          DIR *d;
+          struct dirent *dir;
+          if(args[1]==NULL){                    //When no file location is specified
+            d=opendir(pwd);
+          }
+          else{                                 //When args is a specific folder
+            d=opendir(args[1]);
+          }
+          if (d) {
+            while ((dir = readdir(d)) != NULL) {
+              printf("%s\n", dir->d_name);
+            }
+          closedir(d);
+          }
         }
-
-        if(strcmp(args[0],"pid")==0){                 // Prints the current pid
+        else if(strcmp(args[0],"cd")==0){
+          DIR *d;
+          if(args[1]==NULL){                            //cd to home directory
+            strcpy(pwd,homedir);
+            chdir(pwd);
+          }
+          else if(strcmp(args[1],"-")==0){              //cd to prev directory
+            chdir("..");
+            pwd = getcwd(NULL, 0);
+          }
+          else if((d = opendir(args[1])) != NULL){      //cd to specified directory
+            if(*args[1]=='/'){            //Checks if connecting to a specific directory
+              strcpy(pwd,args[1]);
+              chdir(pwd);
+            }
+            else{                   //If connecting to a child directory
+              strcat(pwd,"/");
+              strcat(pwd,args[1]);
+              chdir(pwd);
+            }
+            pwd = getcwd(NULL, 0);          //Call getcwd to purify any errors in new pwd
+          }
+          else{
+            printf("\nFile not found.");
+          }
+        }
+        else if(strcmp(args[0],"pid")==0){                 // Prints the current pid
           pid=getpid();
           printf("%d",pid);
         }
-
-        if(strcmp(args[0],"printenv")==0){                 // Prints the environment
+        else if(strcmp(args[0],"printenv")==0){                 // Prints the environment
           if(args[1]==NULL){                                // if there is no argument
             printf("printing environment");
             int i;
@@ -151,8 +184,7 @@ int sh( int argc, char **argv, char **envp )
           }
         
         }
-
-        if(strcmp(args[0],"setenv")==0){                 // Prints the environment
+        else if(strcmp(args[0],"setenv")==0){                 // Prints the environment
           if(args[1]==NULL){                                // if there is no argument
             int i;
             for(i=0;envp[i] != NULL; i++){
@@ -172,11 +204,10 @@ int sh( int argc, char **argv, char **envp )
         
         }
 
+
       }
       
       
-      
-    
     }
     
     /*pid=fork();
