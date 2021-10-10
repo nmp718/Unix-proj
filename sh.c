@@ -95,7 +95,6 @@ int sh( int argc, char **argv, char **envp )
         //args[1] = strtok(NULL, s);                                                            // Set second part of string as argument (can maybe use s instead of \n)
       
         //printf("\n%s", args[1]);
-
         if(strcmp(args[0],"exit")==0){                                                      // If the command entered is exit, exit the shell
           exit(0);
         }
@@ -150,7 +149,7 @@ int sh( int argc, char **argv, char **envp )
               strcpy(pwd,args[1]);
               chdir(pwd);
             }
-            else{                   //If connecting to a child directory
+            else{                         //If connecting to a child directory
               strcat(pwd,"/");
               strcat(pwd,args[1]);
               chdir(pwd);
