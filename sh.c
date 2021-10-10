@@ -126,7 +126,17 @@ int sh( int argc, char **argv, char **envp )
         }
 
         if(strcmp(args[0],"ls")==0){
-
+          DIR *d;
+          struct dirent *dir;
+          d=opendir(pwd);
+          if (d) {
+            while ((dir = readdir(d)) != NULL) {
+              if (dir->d_type == DT_REG){
+                printf("%s\n", dir->d_name);
+              }
+            }
+          closedir(d);
+          }
         }
 
         if(strcmp(args[0],"pid")==0){                 // Prints the current pid
