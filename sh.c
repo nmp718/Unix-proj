@@ -130,19 +130,34 @@ int sh( int argc, char **argv, char **envp )
           if(args[1]==NULL){                    //When no file location is specified
             d=opendir(pwd);
           }
-          else if(strcmp(args[1],"~")==0){         //LS home directory
-            d=opendir(homedir);
-          }
           else{                                 //When args is a specific folder
             d=opendir(args[1]);
           }
           if (d) {
             while ((dir = readdir(d)) != NULL) {
-              if (dir->d_type == DT_REG){
-                printf("%s\n", dir->d_name);
-              }
+              printf("%s\n", dir->d_name);
             }
           closedir(d);
+          }
+        }
+        else if(strcmp(args[0],"cd")==0){
+          DIR *d;
+          if(args[1]==NULL){                            //cd to home directory
+            strcpy(pwd,homedir);
+            chdir(pwd);
+          }
+          else if(strcmp(args[1],"-")==0){              //cd to prev directory
+            chdir("..");
+            pwd = getcwd(NULL, 0);
+          }
+          else if((d = opendir(args[1])) != NULL){      //cd to specified directory
+            strcat(pwd,"/");
+            strcat(pwd,args[1]);
+            chdir(pwd);
+            pwd = getcwd(NULL, 0);          //Call getcwd to purity any errors in new pwd
+          }
+          else{
+            printf("\nFile not found.");
           }
         }
         else if(strcmp(args[0],"pid")==0){                 // Prints the current pid
