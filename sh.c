@@ -203,6 +203,15 @@ int sh( int argc, char **argv, char **envp )
           
         
         }
+        else if(strcmp(args[0],"which")==0 && args[1]!=NULL){                 // Which command
+          which(args[1],pathlist);
+          
+        }
+        else if(strcmp(args[0],"where")==0 && args[1]!=NULL){                 // Where command
+          where(args[1],pathlist);
+          
+        }
+        
 
 
       }
@@ -249,6 +258,15 @@ char *which(char *command, struct pathelement *pathlist ) //prints the first, wi
 
 char *where(char *command, struct pathelement *pathlist ) // prints all. Continue going to the list, create a string with all the answers, return that. 
 {
+
+  pathlist = get_path();
+    while (pathlist) {         // WHERE
+      sprintf(command, "%s/gcc", pathlist->element);
+      if (access(command, F_OK) == 0)
+        printf("[%s]\n", command);
+      pathlist = pathlist->next;
+    }
+
   /* similarly loop through finding all locations of command */
 } /* where() */
 
