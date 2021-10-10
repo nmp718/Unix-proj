@@ -1,6 +1,5 @@
-// Nick was here
-// And Jon too
-// This push is at 8:46 pm
+// Nick Peterson was here
+// And Jonathan Adams too
 
 #include <stdio.h>
 #include <string.h>
@@ -108,16 +107,12 @@ int sh( int argc, char **argv, char **envp )
             printf("Enter Prompt: ");
             fgets(buffer, BUFFERMAX, stdin);
             strcpy(prompt,buffer);
-            prompt[strlen(prompt)-1]='\0';              //Concatenates prompt to the front of pwd
+            prompt[strlen(prompt)-1]='\0';                      //Removes the newline char from prompt
           }
-          else{                                                                                // When there is an argument with the prompt
-            //char swapPwd[128+PROMPTMAX]; //set to max size of pwd + prompt size
+          else{                                                             // When there is an argument with the prompt
             printf("\nWith an argument");
             strcpy(prompt,args[1]);   //Make sure prompt does not get overwritten
-          
-            //printf("%s",pwd);       // a test
           }
-
         }
         else if(strcmp(args[0],"ls")==0){
           DIR *d;
@@ -197,8 +192,6 @@ int sh( int argc, char **argv, char **envp )
           else if(args[2]==NULL){                     // one argument
             envp[i]=args[2]; //WORK IN PROGRESS, NEEDS TO BE FIXED
           }
-          
-        
         }
         else{     //Unable to parse command
           printf("Invalid Command: Try again");
