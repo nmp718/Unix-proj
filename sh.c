@@ -136,17 +136,28 @@ int sh( int argc, char **argv, char **envp )
 
         if(strcmp(args[0],"printenv")==0){                 // Prints the environment
           if(args[1]==NULL){                                // if there is no argument
-
+            printf("printing environment");
+            int i;
+            for(i=0;envp[i] != NULL; i++){
+            printf("\n%s",envp[i]);
+            }
           }
-          else{
-
+          else if(args[2]!=NULL){                      // Too many arguments
+            printf("Insert error message here");        // THIS IS NOT THE CORRECT ERROR MESSAGE, CHANGE THIS LATER NICK
+          }
+          else{                                         // Just one argument
+            printf("With an argument");
+            printf("%s", getenv(args[1]));
           }
         
         }
 
         if(strcmp(args[0],"setenv")==0){                 // Prints the environment
           if(args[1]==NULL){                                // if there is no argument
-
+            int i;
+            for(i=0;envp[i] != NULL; i++){
+            printf("\n%s",envp[i]);
+            }
           }
           else{
             
