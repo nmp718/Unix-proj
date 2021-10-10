@@ -104,7 +104,7 @@ int sh( int argc, char **argv, char **envp )
           printf("\n[%s]", pwd);                                                              // Prints the current working directory
         }
         if(strcmp(args[0],"prompt")==0){                                                       // If the command entered is prompt
-        
+          pwd=getcwd(NULL, 0); 
           if(args[1]==NULL){                                                               // if there is not argument for prompt
             printf("Enter Prompt: ");
             fgets(buffer, BUFFERMAX, stdin);
@@ -120,16 +120,36 @@ int sh( int argc, char **argv, char **envp )
             //printf("%s",pwd);       // a test
           }
 
-      }
+        }
 
-      if(strcmp(args[0],"list")==0){
+        if(strcmp(args[0],"ls")==0){
 
-      }
+        }
 
-      if(strcmp(args[0],"pid")==0){                 // Prints the current pid
-        pid=getpid();
-        printf("%d",pid);
-      }
+        if(strcmp(args[0],"pid")==0){                 // Prints the current pid
+          pid=getpid();
+          printf("%d",pid);
+        }
+
+        if(strcmp(args[0],"printenv")==0){                 // Prints the environment
+          if(args[1]==NULL){                                // if there is no argument
+
+          }
+          else{
+
+          }
+        
+        }
+
+        if(strcmp(args[0],"setenv")==0){                 // Prints the environment
+          if(args[1]==NULL){                                // if there is no argument
+
+          }
+          else{
+            
+          }
+        
+        }
 
       }
       else{
