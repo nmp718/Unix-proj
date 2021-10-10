@@ -59,6 +59,7 @@ int sh( int argc, char **argv, char **envp )
   while ( go )
   {
     // print your prompt 
+
     printf("\n%s[%s]", prompt, pwd);      // Prints the current working directory
     printf("%s", arrows);       // arrows at the end of the directory
 
@@ -178,8 +179,8 @@ int sh( int argc, char **argv, char **envp )
             printf("printenv: Too many arguments.");        
           }
           else{                                         // Just one argument
-            printf("With an argument");
-            printf("%s", getenv(args[1]));
+            printf("%s: ",args[1]);           //prints the env variable
+            printf("%s", getenv(args[1]));  // 
           }
         
         }
@@ -194,21 +195,39 @@ int sh( int argc, char **argv, char **envp )
             printf("setenv: Too many arguments.");        
           }
           else if(args[1] !=NULL && args[2]!=NULL) {                  // Two arguments
-            
+            setenv(args[2],getenv(args[1]),1);                        // 
           }
           else if(args[2]==NULL){                     // one argument
-            envp[i]=args[2]; //WORK IN PROGRESS, NEEDS TO BE FIXED
+            unsetenv(args[1]); 
           }
           
         
         }
-        else{     //Unable to parse command
-          printf("Invalid Command: Try again");
+        else if(strcmp(args[0],"which")==0 && args[1]!=NULL){                 // Which command
+          which(args[1],pathlist);
+          
         }
+        else if(strcmp(args[0],"where")==0 && args[1]!=NULL){                 // Where command
+          where(args[1],pathlist);
+          
+        }
+        else{             // FORKED STUFF GOES HERE
+
+        }
+
+
       }
+      
+      
     }
     
-
+    /*pid=fork();
+    if(pid==0){
+      execve(,args[1]);
+    }
+    else{
+      waitpid(pid);
+    }*/
      /*  else  program to exec */
     {
        /* find it */
@@ -223,6 +242,18 @@ int sh( int argc, char **argv, char **envp )
 
 char *which(char *command, struct pathelement *pathlist ) //prints the first, will be used for executable. Step through linked list, take string, see if its executable, if not, increment to next
 {
+
+    pathlist = get_path();
+    while (pathlist) {         // WHICH
+    //sprintf(command, "%s/gcc", pathlist->element);
+    if (access(pathlist->element, X_OK) == 0) {
+      printf("[%s", pathlist->element);
+      printf("/%s]\n",command);
+      break;
+    }
+    pathlist = pathlist->next;
+  }
+
    /* loop through pathlist until finding command and return it.  Return
    NULL when not found. */
 
@@ -230,6 +261,15 @@ char *which(char *command, struct pathelement *pathlist ) //prints the first, wi
 
 char *where(char *command, struct pathelement *pathlist ) // prints all. Continue going to the list, create a string with all the answers, return that. 
 {
+
+  pathlist = get_path();
+    while (pathlist) {         // WHERE
+      sprintf(command, "%s/gcc", pathlist->element);
+      if (access(command, F_OK) == 0)
+        printf("[%s]\n", command);
+      pathlist = pathlist->next;
+    }
+
   /* similarly loop through finding all locations of command */
 } /* where() */
 
