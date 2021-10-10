@@ -59,6 +59,7 @@ int sh( int argc, char **argv, char **envp )
   while ( go )
   {
     // print your prompt 
+
     printf("\n%s[%s]", prompt, pwd);      // Prints the current working directory
     printf("%s", arrows);       // arrows at the end of the directory
 
@@ -202,13 +203,20 @@ int sh( int argc, char **argv, char **envp )
           
         
         }
-        else{     //Unable to parse command
-          printf("Invalid Command: Try again");
-        }
+
+
       }
+      
+      
     }
     
-
+    /*pid=fork();
+    if(pid==0){
+      execve(,args[1]);
+    }
+    else{
+      waitpid(pid);
+    }*/
      /*  else  program to exec */
     {
        /* find it */
@@ -223,6 +231,17 @@ int sh( int argc, char **argv, char **envp )
 
 char *which(char *command, struct pathelement *pathlist ) //prints the first, will be used for executable. Step through linked list, take string, see if its executable, if not, increment to next
 {
+
+    pathlist = get_path();
+    while (pathlist) {         // WHICH
+    sprintf(command, "%s/gcc", pathlist->element);
+    if (access(command, X_OK) == 0) {
+      printf("[%s]\n", command);
+      break;
+    }
+    pathlist = pathlist->next;
+  }
+
    /* loop through pathlist until finding command and return it.  Return
    NULL when not found. */
 
