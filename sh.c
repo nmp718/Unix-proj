@@ -110,8 +110,9 @@ int sh( int argc, char **argv, char **envp )
             printf("Enter Prompt: ");
             fgets(buffer, BUFFERMAX, stdin);
             strcpy(prompt,buffer);
-            printf("%s", prompt);
-            sprintf(pwd, "%s%s",prompt,pwd);
+            prompt[strlen(prompt)-1]='\0';              //Concatenates prompt to the front of pwd
+            strcat(prompt,pwd);
+            pwd = prompt;
           }
           else{                                                                                // When there is an argument with the prompt
             printf("\nWith an argument");
