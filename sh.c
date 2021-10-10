@@ -137,7 +137,6 @@ int sh( int argc, char **argv, char **envp )
           }
         }
         else if(strcmp(args[0],"cd")==0){
-          DIR *d;
           if(args[1]==NULL){                            //cd to home directory
             strcpy(pwd,homedir);
             chdir(pwd);
@@ -146,7 +145,7 @@ int sh( int argc, char **argv, char **envp )
             chdir("..");
             pwd = getcwd(NULL, 0);
           }
-          else if((d = opendir(args[1])) != NULL){      //cd to specified directory
+          else if(opendir(args[1]) != NULL){      //cd to specified directory
             if(*args[1]=='/'){            //Checks if connecting to a specific directory
               strcpy(pwd,args[1]);
               chdir(pwd);
