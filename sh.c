@@ -179,8 +179,8 @@ int sh( int argc, char **argv, char **envp )
             printf("printenv: Too many arguments.");        
           }
           else{                                         // Just one argument
-            printf("With an argument");
-            printf("%s", getenv(args[1]));
+            printf("%s: ",args[1]);           //prints the env variable
+            printf("%s", getenv(args[1]));  // 
           }
         
         }
@@ -195,10 +195,10 @@ int sh( int argc, char **argv, char **envp )
             printf("setenv: Too many arguments.");        
           }
           else if(args[1] !=NULL && args[2]!=NULL) {                  // Two arguments
-            
+            setenv(args[2],getenv(args[1]),1);                        // 
           }
           else if(args[2]==NULL){                     // one argument
-            envp[i]=args[2]; //WORK IN PROGRESS, NEEDS TO BE FIXED
+            unsetenv(args[1]); 
           }
           
         
@@ -211,7 +211,9 @@ int sh( int argc, char **argv, char **envp )
           where(args[1],pathlist);
           
         }
-        
+        else{             // FORKED STUFF GOES HERE
+
+        }
 
 
       }
@@ -243,9 +245,10 @@ char *which(char *command, struct pathelement *pathlist ) //prints the first, wi
 
     pathlist = get_path();
     while (pathlist) {         // WHICH
-    sprintf(command, "%s/gcc", pathlist->element);
-    if (access(command, X_OK) == 0) {
-      printf("[%s]\n", command);
+    //sprintf(command, "%s/gcc", pathlist->element);
+    if (access(pathlist->element, X_OK) == 0) {
+      printf("[%s", pathlist->element);
+      printf("/%s]\n",command);
       break;
     }
     pathlist = pathlist->next;
