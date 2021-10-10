@@ -116,8 +116,9 @@ int sh( int argc, char **argv, char **envp )
           }
           else{                                                                                // When there is an argument with the prompt
             printf("\nWith an argument");
-            //strcat(pwd,args[1]);                  //  This is not concatonating because there is not enough space
-            sprintf(pwd, "%s%s",args[1],pwd);
+            prompt=args[1];
+            strcat(prompt,pwd);
+            pwd = prompt;
           
             //printf("%s",pwd);       // a test
           }
