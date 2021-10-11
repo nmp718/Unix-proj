@@ -96,6 +96,16 @@ int sh( int argc, char **argv, char **envp )
       
         //printf("\n%s", args[1]);
         if(strcmp(args[0],"exit")==0){                                                      // If the command entered is exit, exit the shell
+          free(prompt);
+          free(commandline);
+          free(owd);
+          i=1;
+          while(args[i]!=NULL){
+            free(args[i]);
+            i++;
+          }
+          free(args);
+          
           exit(0);
         }
         else if(strcmp(args[0],"pwd")==0){                                                       // If the command entered is pwd, print the current working directory
@@ -110,8 +120,11 @@ int sh( int argc, char **argv, char **envp )
             strcpy(prompt,buffer);
             prompt[strlen(prompt)-1]='\0';                      //Removes the newline char from prompt
           }
-          else{                                                             // When there is an argument with the prompt
-            printf("\nWith an argument");
+
+          else{                                                                                // When there is an argument with the prompt
+            //char swapPwd[128+PROMPTMAX]; //set to max size of pwd + prompt size
+            //printf("\nWith an argument");
+
             strcpy(prompt,args[1]);   //Make sure prompt does not get overwritten
           }
         }
@@ -203,7 +216,16 @@ int sh( int argc, char **argv, char **envp )
           
         }
         else{             // FORKED STUFF GOES HERE
-
+          pid=fork();
+          if(pid==-1){
+            printf("There is an error");
+          }
+          else if(pid==0){
+            execvp(args[0],args);
+          }
+          else{
+            waitpid(pid,&status,WUNTRACED);
+          }
         }
 
 
@@ -212,13 +234,7 @@ int sh( int argc, char **argv, char **envp )
       
     }
     
-    /*pid=fork();
-    if(pid==0){
-      execve(,args[1]);
-    }
-    else{
-      waitpid(pid);
-    }*/
+    
      /*  else  program to exec */
     {
        /* find it */
@@ -255,9 +271,11 @@ char *where(char *command, struct pathelement *pathlist ) // prints all. Continu
 
   pathlist = get_path();
     while (pathlist) {         // WHERE
-      sprintf(command, "%s/gcc", pathlist->element);
-      if (access(command, F_OK) == 0)
-        printf("[%s]\n", command);
+      //sprintf(command, "%s/gcc", pathlist->element);
+      if (access(pathlist->element, F_OK) == 0)
+        printf("[%s", pathlist->element);
+        printf("/%s]\n",command);
+      
       pathlist = pathlist->next;
     }
 
