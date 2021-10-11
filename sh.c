@@ -1,5 +1,7 @@
-// Nick Peterson was here
-// And Jonathan Adams too
+/* CISC 361: Project 2: A Unix Shell 
+Contributors: Nicholas Peterson and Jonathan Adams
+Date: 10/10/21
+*/ 
 
 #include <stdio.h>
 #include <string.h>
