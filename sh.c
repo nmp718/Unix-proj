@@ -98,6 +98,16 @@ int sh( int argc, char **argv, char **envp )
         //printf("\n%s", args[1]);
 
         if(strcmp(args[0],"exit")==0){                                                      // If the command entered is exit, exit the shell
+          free(prompt);
+          free(commandline);
+          free(owd);
+          i=1;
+          while(args[i]!=NULL){
+            free(args[i]);
+            i++;
+          }
+          free(args);
+          
           exit(0);
         }
         else if(strcmp(args[0],"pwd")==0){                                                       // If the command entered is pwd, print the current working directory
@@ -267,9 +277,11 @@ char *where(char *command, struct pathelement *pathlist ) // prints all. Continu
 
   pathlist = get_path();
     while (pathlist) {         // WHERE
-      sprintf(command, "%s/gcc", pathlist->element);
-      if (access(command, F_OK) == 0)
-        printf("[%s]\n", command);
+      //sprintf(command, "%s/gcc", pathlist->element);
+      if (access(pathlist->element, F_OK) == 0)
+        printf("[%s", pathlist->element);
+        printf("/%s]\n",command);
+      
       pathlist = pathlist->next;
     }
 
