@@ -206,8 +206,9 @@ int sh( int argc, char **argv, char **envp )
           pid = fork();
           if(pid == -1) {perror("Error"); exit(0);}
           else if(pid == 0){
-            if(execve(args[0],args,environment) == -1){
+            if(execve(args[0],&args[0],NULL) == -1){
               perror("Cannot execute");
+              exit(1);
             }
           }
           else{
