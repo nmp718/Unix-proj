@@ -204,9 +204,10 @@ int sh( int argc, char **argv, char **envp )
         }
         else{             // FORKED STUFF GOES HERE
           pid = fork();
+          char *env_args[] = {(char*)0};
           if(pid == -1) {perror("Error"); exit(0);}
           else if(pid == 0){
-            if(execve(args[0],&args[0],NULL) == -1){
+            if(execve(args[0],&args[0],env_args) == -1){
               perror("Cannot execute");
               exit(1);
             }
