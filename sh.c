@@ -203,22 +203,18 @@ int sh( int argc, char **argv, char **envp )
           
         }
         else{             // FORKED STUFF GOES HERE
-          pid_t pid_child;
-          fork();
-          pid_child = getpid();
-          if(pid_child == 0){
-            //execve(pid_child, args[1], envp);
-            printf("%d and %d\n",pid,pid_child);
+          pid = fork();
+          if(pid == -1) {perror("Error"); exit(0);}
+          else if(pid == 0){
+            if(execve(args[0],args,environment) == -1){
+              perror("Cannot execute");
+            }
           }
           else{
-            waitpid(pid, NULL, 0);
+            waitpid(pid,&status,WUNTRACED);
           }
         }
-
-
       }
-      
-      
     }
     
     /*pid=fork();
