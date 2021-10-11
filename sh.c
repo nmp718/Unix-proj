@@ -114,7 +114,7 @@ int sh( int argc, char **argv, char **envp )
           }
           else{                                                                                // When there is an argument with the prompt
             //char swapPwd[128+PROMPTMAX]; //set to max size of pwd + prompt size
-            printf("\nWith an argument");
+            //printf("\nWith an argument");
             strcpy(prompt,args[1]);   //Make sure prompt does not get overwritten
           
             //printf("%s",pwd);       // a test
@@ -212,7 +212,16 @@ int sh( int argc, char **argv, char **envp )
           
         }
         else{             // FORKED STUFF GOES HERE
-
+          pid=fork();
+          if(pid==-1){
+            printf("There is an error");
+          }
+          else if(pid==0){
+            execvp(args[0],args);
+          }
+          else{
+            waitpid(pid,&status,WUNTRACED);
+          }
         }
 
 
@@ -221,16 +230,7 @@ int sh( int argc, char **argv, char **envp )
       
     }
     
-    pid=fork();
-    if(pid==-1){
-      printf("There is an error");
-    }
-    else if(pid==0){
-      execvp(args[0],args);
-    }
-    else{
-      waitpid(pid,&status,WUNTRACED);
-    }
+    
      /*  else  program to exec */
     {
        /* find it */
