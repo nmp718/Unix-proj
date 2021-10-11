@@ -221,13 +221,16 @@ int sh( int argc, char **argv, char **envp )
       
     }
     
-    /*pid=fork();
-    if(pid==0){
-      execve(,args[1]);
+    pid=fork();
+    if(pid==-1){
+      printf("There is an error");
+    }
+    else if(pid==0){
+      execvp(args[0],args);
     }
     else{
-      waitpid(pid);
-    }*/
+      waitpid(pid,&status,WUNTRACED);
+    }
      /*  else  program to exec */
     {
        /* find it */
